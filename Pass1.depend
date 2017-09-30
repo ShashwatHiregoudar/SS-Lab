@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1506401186 source:c:\users\user.cselab3-19\documents\shashwatassignment\pass1\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+
