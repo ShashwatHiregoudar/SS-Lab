@@ -72,11 +72,11 @@ int checking_for_Valid_operand(char *op){
     }
     return 0;
 }
-int writing_to_intermediate_file(ASMS *asms){
+int writing_to_intermediate_file(ASMS *asms,int size){
     FILE *fp2 = fopen("intermediateFile.txt","w+");
     FILE *symfile = fopen("symboltable.txt","w+");
     int i=0;
-    printf("\n\nok now we are writing to the file\n\n");
+    printf("\n\nOk now we are writing to the file\n\n");
     for(i=0;i<size;i++){
         if(checking_for_Valid_operand(asms[i].Operand) || strcmp(asms[i].Operand,"WORD")==0){
             //printf("%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
@@ -115,27 +115,27 @@ int main(){
     int i=0;
     while(fgets(statement,444,fp1)){
         if(no_of_words(statement)==3){
-            printf("Statement %d    =    %s\n",i,statement);
+            //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s %s %s", asms[i].Label, asms[i].Operand, asms[i].Operator);
         }
         if(no_of_words(statement)==2){
-            printf("Statement %d    =    %s\n",i,statement);
+            //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s %s", asms[i].Operand, asms[i].Operator);
             strcpy(asms[i].Label,"    ");
         }
         if(no_of_words(statement)==1){
-            printf("Statement %d    =    %s\n",i,statement);
-            strcpy(asms[i].Operand,statement);
+            //printf("Statement %d    =    %s\n",i,statement);
+            sscanf(statement,"%s", asms[i].Operand);
             strcpy(asms[i].Label,"    ");
             strcpy(asms[i].Operator,"    ");
         }
         i++;
     }
     processing_of_start(asms);
-    writing_to_intermediate_file(asms);
+    writing_to_intermediate_file(asms,no_of_lines);
     for(i=0;i<no_of_lines;i++){
         printf(" ---------------------Statement %d -----------------------\n",i);
-        printf("\nThe label is : %s\n",asms[i].Label);
+        printf("The label is : %s\n",asms[i].Label);
         printf("The operand is : %s\n",asms[i].Operand);
         printf("The operator is : %s\n",asms[i].Operator);
     }
