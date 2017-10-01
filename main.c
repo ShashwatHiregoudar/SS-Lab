@@ -81,15 +81,20 @@ int writing_to_intermediate_file(ASMS *asms){
         if(checking_for_Valid_operand(asms[i].Operand) || strcmp(asms[i].Operand,"WORD")==0){
             //printf("%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            if(strcmp(asms[i].Operand,"WORD")==0){
+                fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            }
             LOCATION_COUNTER+=3;
         }
-        if(strcmp(asms[i].Operand,"RESW")==0){
+        else if(strcmp(asms[i].Operand,"RESW")==0){
             fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             LOCATION_COUNTER+=3*atoi(asms[i].Operator);
             continue;
         }
-        if(strcmp(asms[i].Operand,"RESB")==0){
+        else if(strcmp(asms[i].Operand,"RESB")==0){
             fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             LOCATION_COUNTER+=atoi(asms[i].Operator);
             continue;
         }
