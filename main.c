@@ -75,9 +75,9 @@ int checking_for_Valid_operand(char *op){
 int writing_to_intermediate_file(ASMS *asms){
     FILE *fp2 = fopen("intermediateFile.txt","w+");
     FILE *symfile = fopen("symboltable.txt","w+");
-    int i;
+    int i=0;
     printf("\n\nok now we are writing to the file\n\n");
-    for(i=0;i<24;i++){
+    for(i=0;i<size;i++){
         if(checking_for_Valid_operand(asms[i].Operand) || strcmp(asms[i].Operand,"WORD")==0){
             //printf("%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
