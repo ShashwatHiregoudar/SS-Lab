@@ -9,13 +9,6 @@ struct ASMS{
 };
 typedef struct ASMS ASMS;
 int LOCATION_COUNTER = 0;
-int generating_symbol_table(ASMS *asms){
-    int i;
-    FILE *fp = fopen("symbolTable.txt","w+");
-    for(i=0;i<27;i++){
-        
-    }
-}
 int val(char c){
     if (c >= '0' && c <= '9')
         return (int)c - '0';
@@ -81,6 +74,7 @@ int checking_for_Valid_operand(char *op){
 }
 int writing_to_intermediate_file(ASMS *asms){
     FILE *fp2 = fopen("intermediateFile.txt","w+");
+    FILE *symfile = fopen("symboltable.txt","w+");
     int i;
     printf("\n\nok now we are writing to the file\n\n");
     for(i=0;i<24;i++){
@@ -88,6 +82,16 @@ int writing_to_intermediate_file(ASMS *asms){
             //printf("%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             LOCATION_COUNTER+=3;
+        }
+        if(strcmp(asms[i].Operand,"RESW")==0){
+            fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            LOCATION_COUNTER+=3*atoi(asms[i].Operator);
+            continue;
+        }
+        if(strcmp(asms[i].Operand,"RESB")==0){
+            fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            LOCATION_COUNTER+=atoi(asms[i].Operator);
+            continue;
         }
         else
         {
