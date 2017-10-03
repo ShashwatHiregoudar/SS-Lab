@@ -165,7 +165,7 @@ int writing_to_intermediate_file(ASMS *asms,int size){
         }
         if(strcmp(asms[i].Operand,"WORD")==0){
             //printf("WORD : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            fprintf(fp2,"%X  %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
             LOCATION_COUNTER+=3;
             continue;
