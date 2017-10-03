@@ -14,6 +14,7 @@ struct symboltable{
 typedef struct symboltable symboltable;
 typedef struct ASMS ASMS;
 symboltable stab[10];
+int stab_size = 0;
 int LOCATION_COUNTER = 0;
 int val(char c){
     if (c >= '0' && c <= '9')
@@ -79,36 +80,49 @@ int checking_for_Valid_operand(char *op){
     return 0;
 }
 int creation_of_symbol_table_array(ASMS *asms,int size){
-    int i;
-    int j=0;
+    int i,j=0;
     for(i=0;i<size;i++){
         if(strcmp(asms[i].Operand,"WORD")==0){
-            stab[j].lno = i+1;
-            sscanf(asms[i].Label,"%s",stab[j].lab);
-            j++;
+            stab[stab_size].lno = i+1;
+            sscanf(asms[i].Label,"%s",stab[stab_size].lab);
+            stab_size++;
         }
         if(strcmp(asms[i].Operand,"RESW")==0){
-            stab[j].lno = i+1;
-            sscanf(asms[i].Label,"%s",stab[j].lab);
-            j++;
+            stab[stab_size].lno = i+1;
+            sscanf(asms[i].Label,"%s",stab[stab_size].lab);
+            stab_size++;
         }
         if(strcmp(asms[i].Operand,"BYTE")==0){
-            stab[j].lno = i+1;
-            sscanf(asms[i].Label,"%s",stab[j].lab);
-            j++;
+            stab[stab_size].lno = i+1;
+            sscanf(asms[i].Label,"%s",stab[stab_size].lab);
+            stab_size++;
         }
         if(strcmp(asms[i].Operand,"RESB")==0){
-            stab[j].lno = i+1;
-            sscanf(asms[i].Label,"%s",stab[j].lab);
-            j++;
+            stab[stab_size].lno = i+1;
+            sscanf(asms[i].Label,"%s",stab[stab_size].lab);
+            stab_size++;
         }
     }
+    ///Check for repetitions
+    char *c;
+    FILE *errfile = fopen("ErrorsFile.txt","w+");
+    for(;j<stab_size;j++){
+        strcpy(c,stab[j].lab);
+        int k;
+        for(k=j;k<stab_size;k++){
+            if(strcmp(stab[k].lab,c)==0 && j != k){
+                printf("Repetition occured\n");
+                fprintf(errfile,"Repetition : %s  \t  Line No : %d\n",stab[k].lab,stab[k].lno);
+            }
+        }
+    }
+    fclose(errfile);
     return 1;
 }
 int writing_to_intermediate_file(ASMS *asms,int size){
     FILE *fp2 = fopen("intermediateFile.txt","w+");
     FILE *symfile = fopen("symboltable.txt","w+");
-    FILE *errfile = fopen("ErrorsFile.txt","w+");
+    FILE *errfile = fopen("ErrorsFile.txt","a");
     int i=0;
     symboltable symtbl[10];
     int j=0;
@@ -179,7 +193,7 @@ int writing_to_intermediate_file(ASMS *asms,int size){
         else{
             //printf("ELSE : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            fprintf(errfile,"%X %s %s %s\t at line no %d\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator,(i+1));
+            fprintf(errfile,"Invalid Operation : %X %s %s %s\t at line no %d\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator,(i+1));
             LOCATION_COUNTER+=1;
             continue;
         }
@@ -213,9 +227,6 @@ int main(){
     processing_of_start(asms);
     creation_of_symbol_table_array(asms,no_of_lines);
     writing_to_intermediate_file(asms,no_of_lines);
-    for(i=0;i<10;i++){
-        printf("%d %s\n",stab[i].lno,stab[i].lab);
-    }
     /*
     for(i=0;i<no_of_lines;i++){
         printf(" ---------------------Statement %d -----------------------\n",i);
