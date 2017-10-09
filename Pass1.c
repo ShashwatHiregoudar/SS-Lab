@@ -128,13 +128,10 @@ int writing_to_intermediate_file(ASMS *asms,int size){
     int j=0;
     //printf("\n\nOk now we are writing to the file\n\n");
     for(i=0;i<size;i++){
-        char *label = asms[i].Label;
-        char *operand = asms[i].Operand;
-        char *opperator = asms[i].Operator;
         int locctr = LOCATION_COUNTER;
         if(strcmp(asms[i].Operand,"START")==0){
             //printf("START : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            fprintf(fp2,"%X  %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             LOCATION_COUNTER+=0;
             continue;
         }
@@ -152,7 +149,7 @@ int writing_to_intermediate_file(ASMS *asms,int size){
                     LOCATION_COUNTER+=strlen(asms[i].Operator)-3;
                     continue;
                 }
-                else if(asms[i].Operator[1]=='X'){
+                if(asms[i].Operator[1]=='X'){
                     fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
                     LOCATION_COUNTER+=(strlen(asms[i].Operator)-3)/2;
                     continue;
@@ -190,6 +187,9 @@ int writing_to_intermediate_file(ASMS *asms,int size){
             LOCATION_COUNTER+=atoi(asms[i].Operator);
             continue;
         }
+        if(strcmp(asms[i].Operand,"LTORG")){
+            //Literal table comes into picture
+        }
         else{
             //printf("ELSE : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
@@ -214,13 +214,13 @@ int main(){
         if(no_of_words(statement)==2){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s %s", asms[i].Operand, asms[i].Operator);
-            strcpy(asms[i].Label,"     ");
+            strcpy(asms[i].Label,"\t");
         }
         if(no_of_words(statement)==1){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s", asms[i].Operand);
-            strcpy(asms[i].Label,"     ");
-            strcpy(asms[i].Operator,"     ");
+            strcpy(asms[i].Label,"\t");
+            strcpy(asms[i].Operator,"\t");
         }
         i++;
     }
