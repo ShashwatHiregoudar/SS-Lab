@@ -141,25 +141,6 @@ int writing_to_intermediate_file(ASMS *asms,int size){
             LOCATION_COUNTER+=0;
             continue;
         }
-        if(checking_for_Valid_operand(asms[i].Operand)){
-            //printf("Valid : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            if(asms[i].Operator[0]=='='){
-                if(asms[i].Operator[1]=='C'){
-                    fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-                    LOCATION_COUNTER+=strlen(asms[i].Operator)-3;
-                    continue;
-                }
-                if(asms[i].Operator[1]=='X'){
-                    fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-                    LOCATION_COUNTER+=(strlen(asms[i].Operator)-3)/2;
-                    continue;
-                }
-            }
-
-            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            LOCATION_COUNTER+=3;
-            continue;
-        }
         if(strcmp(asms[i].Operand,"WORD")==0){
             //printf("WORD : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
@@ -189,6 +170,25 @@ int writing_to_intermediate_file(ASMS *asms,int size){
         }
         if(strcmp(asms[i].Operand,"LTORG")){
             //Literal table comes into picture
+        }
+        if(checking_for_Valid_operand(asms[i].Operand)){
+            //printf("Valid : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            if(asms[i].Operator[0]=='='){
+                if(asms[i].Operator[1]=='C'){
+                    fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+                    LOCATION_COUNTER+=strlen(asms[i].Operator)-3;
+                    continue;
+                }
+                if(asms[i].Operator[1]=='X'){
+                    fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+                    LOCATION_COUNTER+=(strlen(asms[i].Operator)-3)/2;
+                    continue;
+                }
+            }
+
+            fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            LOCATION_COUNTER+=3;
+            continue;
         }
         else{
             //printf("ELSE : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);

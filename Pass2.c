@@ -103,7 +103,7 @@ int main(){
     FILE *fp1 = fopen("intermediateFile.txt","r");
     char statement[35];
     while(fgets(statement,35,fp1)){
-        printf("%s : ",statement);
+        printf("%s",statement);
         int x = no_of_words(statement);
         printf("%d\n",x);
     }
