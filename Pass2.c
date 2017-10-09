@@ -50,6 +50,10 @@ int no_of_words(char *statement){
     while(statement[i]!='\n'){
         if(statement[i]==' '){
             count++;
+            
+        }
+        if(statement[i]=='\t'){
+            count--;
         }
         i++;
     }
@@ -75,37 +79,32 @@ int checking_for_Valid_operand(char *op){
     }
     return 0;
 }
+int read_optab()
 int main(){
-    /*
-        FILE *fp1 = fopen("intermediateFile.txt","r");
-        int no_of_lines = no_of_lines_in_file(fp1);
-        FILE *fp1 = fopen("intermediateFile.txt","r");
-        ASMS asms[no_of_lines];
-        char statement[20];
-        while(fgets(statement,20,fp1)){
-            if(no_of_words(statement)==4){
-                //printf("Statement %d    =    %s\n",i,statement);
-                sscanf(statement,"%s %s %s %s", asms[i].LocCTR, asms[i].Label, asms[i].Operand, asms[i].Operator);
-            }
-            if(no_of_words(statement)==3){
-                //printf("Statement %d    =    %s\n",i,statement);
-                sscanf(statement,"%s       %s %s", asms[i].LocCTR, asms[i].Operand, asms[i].Operator);
-                strcpy(asms[i].Label,"     ");
-            }
-            if(no_of_words(statement)==2){
-                //printf("Statement %d    =    %s\n",i,statement);
-                sscanf(statement,"%s       %s       ", asms[i].LocCTR, asms[i].Operand);
-                strcpy(asms[i].Label,"     ");
-                strcpy(asms[i].Operator,"     ");
-            }
-        }
-*/
     FILE *fp1 = fopen("intermediateFile.txt","r");
-    char statement[35];
-    while(fgets(statement,35,fp1)){
-        printf("%s",statement);
-        int x = no_of_words(statement);
-        printf("%d\n",x);
+    int no_of_lines = no_of_lines_in_file(fp1);
+    FILE *fp1 = fopen("intermediateFile.txt","r");
+    ASMS asms[no_of_lines];
+    char statement[20];
+    while(fgets(statement,20,fp1)){
+        if(no_of_words(statement)==4){
+            //printf("Statement %d    =    %s\n",i,statement);
+            sscanf(statement,"%s %s %s %s", asms[i].LocCTR, asms[i].Label, asms[i].Operand, asms[i].Operator);
+        }
+        if(no_of_words(statement)==3){
+            //printf("Statement %d    =    %s\n",i,statement);
+            sscanf(statement,"%s       %s %s", asms[i].LocCTR, asms[i].Operand, asms[i].Operator);
+            strcpy(asms[i].Label,"     ");
+        }
+        if(no_of_words(statement)==2){
+            //printf("Statement %d    =    %s\n",i,statement);
+            sscanf(statement,"%s       %s       ", asms[i].LocCTR, asms[i].Operand);
+            strcpy(asms[i].Label,"     ");
+            strcpy(asms[i].Operator,"     ");
+        }
     }
+    FILE fp = fopen("optab.txt","r");
+    no_of_lines_in_file(fp);
+
     return 1;
 }
