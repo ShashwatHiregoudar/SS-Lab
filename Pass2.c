@@ -16,10 +16,15 @@ struct SYMBOLTABLE{
 typedef struct SYMBOLTABLE SYMBOLTABLE;
 struct OPTAB{
     char Operand[7];
-    char Opcode[3];    
+    char Opcode[3];
 };
 typedef struct OPTAB OPTAB;
-
+struct OPCODES{
+    char o[6];
+};
+typedef struct OPCODES OPCODES;
+int optab_size;
+int symboltable_size;
 int val(char c){
     if (c >= '0' && c <= '9')
         return (int)c - '0';
@@ -46,11 +51,10 @@ int toDeci(char *str, int base){
 int no_of_words(char *statement){
     int i=0;
     int count=0;
-    char c;
     while(statement[i]!='\n'){
         if(statement[i]==' '){
             count++;
-            
+
         }
         if(statement[i]=='\t'){
             count--;
@@ -79,32 +83,122 @@ int checking_for_Valid_operand(char *op){
     }
     return 0;
 }
-int read_optab()
+void read_optab(OPTAB *op){
+    FILE *fp = fopen("optab.txt","r");
+    char statement[10];
+    int i=0;
+    while(fgets(statement,10,fp)){
+        ///printf("\n%s %d\n",statement,no_of_words(statement));
+        sscanf(statement,"%s %s",op[i].Operand, op[i].Opcode);
+        i++;
+    }
+}
+void read_symbol_table(SYMBOLTABLE *s){
+    FILE *fp = fopen("symboltable.txt","r");
+    char ss[15];
+    int i=0;
+    while(fgets(ss,15,fp)){
+        sscanf(ss,"%s %s",s[i].locCTR,s[i].Label);
+        i++;
+    }
+}
+void get_opcode(OPTAB *op,char *key,char *value){
+    int i;
+    for(i=0;i<optab_size;i++){
+        if(strcmp(op[i].Operand,key)==0){
+            strcpy(value,op[i].Opcode);
+        }
+    }
+}
+void get_symbol(SYMBOLTABLE *stab,char *key,char *value){
+    int i;
+    for(i=0;i<symboltable_size;i++){
+        if(strcmp(stab[i].Label,key)==0){
+            strcpy(value,stab[i].locCTR);
+        }
+    }
+}
+int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,OPTAB *otab,SYMBOLTABLE *stab){
+    int i,j=0;
+    for(i=0;i<asms_size;i++){
+        if(strcmp(asms[i].Operand,"WORD")==0){
+            sscanf(asms[i].Operator,"%s",opcodes[j].o);
+            strcat(opcodes[j].o,"00000");
+            strrev(opcodes[j].o);
+            printf("%s",opcodes[j].o);
+            j++;
+            continue;
+        }
+        if(checking_for_Valid_operand(asms[i].Operand)){
+            //printf("Valid : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            if(asms[i].Operator[0]=='='){
+                if(asms[i].Operator[1]=='C'){
+                    strcpy(opcodes[j].o,"------");
+                    printf("------");
+                    j++;
+                    continue;
+                }
+                if(asms[i].Operator[1]=='X'){
+                    strcpy(opcodes[j].o,"------");
+                    printf("------");
+                    j++;
+                    continue;
+                }
+            }
+
+            char f2[2],l4[4];
+            get_opcode(otab,asms[i].Operand,f2);
+            get_symbol(stab,asms[i].Operator,l4);
+            strcpy(opcodes[j].o,strcat(f2,l4));
+            printf("%s",opcodes[j].o);
+            j++;
+            continue;
+        }
+        else{
+            strcpy(opcodes[j].o,"------");
+        }
+    }
+}
+
 int main(){
-    FILE *fp1 = fopen("intermediateFile.txt","r");
-    int no_of_lines = no_of_lines_in_file(fp1);
+    FILE *fpa = fopen("intermediateFile.txt","r");
+    int no_of_lines = no_of_lines_in_file(fpa);
     FILE *fp1 = fopen("intermediateFile.txt","r");
     ASMS asms[no_of_lines];
     char statement[20];
+    int i=0;
     while(fgets(statement,20,fp1)){
         if(no_of_words(statement)==4){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s %s %s %s", asms[i].LocCTR, asms[i].Label, asms[i].Operand, asms[i].Operator);
+            i++;
         }
         if(no_of_words(statement)==3){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s       %s %s", asms[i].LocCTR, asms[i].Operand, asms[i].Operator);
-            strcpy(asms[i].Label,"     ");
+            strcpy(asms[i].Label,"     ");i++;
         }
         if(no_of_words(statement)==2){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s       %s       ", asms[i].LocCTR, asms[i].Operand);
             strcpy(asms[i].Label,"     ");
-            strcpy(asms[i].Operator,"     ");
+            strcpy(asms[i].Operator,"     ");i++;
         }
     }
-    FILE fp = fopen("optab.txt","r");
-    no_of_lines_in_file(fp);
-
+    ///for reading otpab
+    FILE *foptab = fopen("optab.txt","r");
+    optab_size = no_of_lines_in_file(foptab);
+    OPTAB optab[optab_size];
+    read_optab(optab);
+    fclose(foptab);
+    //printf("\n\n\n\n\n\n");
+    ///for reading symboltable
+    FILE *fstab = fopen("symboltable.txt","r");
+    symboltable_size = no_of_lines_in_file(fstab);
+    SYMBOLTABLE stab[symboltable_size];
+    read_symbol_table(stab);
+    fclose(fstab);
+    OPCODES op[no_of_lines];
+    generate_opcodes(op,no_of_lines,asms,no_of_lines,optab,stab);
     return 1;
 }
