@@ -141,7 +141,7 @@ int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,
             sscanf(asms[i].Operator,"%s",opcodes[j].o);
             strcat(opcodes[j].o,"00000");
             rev(opcodes[j].o);
-            printf("Loc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            printf("--  word  --\nLoc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
             //opcodes[j].o = strrev(opcodes[j].o);
             printf("opcode : %s\n",opcodes[j].o);
             j++;
@@ -152,28 +152,30 @@ int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,
             if(asms[i].Operator[0]=='='){
                 if(asms[i].Operator[1]=='C'){
                     strcpy(opcodes[j].o,"------");
-                    printf("opcode : ------");
+
                     printf("Loc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
+                    printf("opcode : ------\n");
                     j++;
                     continue;
                 }
                 if(asms[i].Operator[1]=='X'){
                     strcpy(opcodes[j].o,"------");
-                    printf("opcode ; ------");
+
                     printf("Loc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
+                    printf("opcode ; ------\n");
                     j++;
                     continue;
                 }
             }
 
-            char f2[2],l4[4];
+            char f2[2],l4[4] = "0000";
             get_opcode(otab,asms[i].Operand,f2);
             get_symbol(stab,asms[i].Operator,l4);
             strcpy(opcodes[j].o,strcat(f2,l4));
             printf("Loc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
             printf("opcode : %s\n",opcodes[j].o);
             j++;
-            
+
             continue;
         }
         else{
