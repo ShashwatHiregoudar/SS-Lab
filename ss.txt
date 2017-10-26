@@ -1,0 +1,19 @@
+What language you should know to develop boot loader
+to develop the simple boot loader you need to know C or C++
+(((mixed code - combine higher level and lower level instructions)))
+
+
+What compiler you need
+
+To use mixed code technology 
+you need at least two compilers: 
+for Assembler and C/C++, and also 
+the linker 
+to join object files (.obj) into the one executable
+
+There are two modes of processor functioning: 
+real mode -  Real mode is 16-bit and has some limitations.
+protected mode - Protected mode is 32-bit and is fully used in OS work
+
+to build the program and obtain executable file,
+you will need the compiler and linker of Assembler for 16-bit mode
