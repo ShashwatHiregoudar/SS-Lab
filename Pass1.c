@@ -174,6 +174,9 @@ int writing_to_intermediate_file(ASMS *asms,int size){
         if(checking_for_Valid_operand(asms[i].Operand)){
             //printf("Valid : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             if(asms[i].Operator[0]=='='){
+                if(strcmp(asms[i].Label,"\t")){
+                    fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+                }
                 if(asms[i].Operator[1]=='C'){
                     fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
                     LOCATION_COUNTER+=strlen(asms[i].Operator)-3;
@@ -187,6 +190,9 @@ int writing_to_intermediate_file(ASMS *asms,int size){
             }
 
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
+            if(strcmp(asms[i].Label,"\t")){
+                fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
+            }
             LOCATION_COUNTER+=3;
             continue;
         }
