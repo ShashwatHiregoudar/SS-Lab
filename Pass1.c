@@ -129,6 +129,9 @@ int writing_to_intermediate_file(ASMS *asms,int size){
     //printf("\n\nOk now we are writing to the file\n\n");
     for(i=0;i<size;i++){
         int locctr = LOCATION_COUNTER;
+        char *label=asms[i].Label;
+        char *operand= asms[i].Operand;
+        char *operatr= asms[i].Operator;
         if(strcmp(asms[i].Operand,"START")==0){
             //printf("START : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
@@ -153,7 +156,7 @@ int writing_to_intermediate_file(ASMS *asms,int size){
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
             LOCATION_COUNTER+=1;
-        }   
+        }
         if(strcmp(asms[i].Operand,"RESW")==0){
             //printf("RESW : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             fprintf(fp2,"%X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
@@ -174,7 +177,7 @@ int writing_to_intermediate_file(ASMS *asms,int size){
         if(checking_for_Valid_operand(asms[i].Operand)){
             //printf("Valid : %X %s %s %s\n",LOCATION_COUNTER,asms[i].Label,asms[i].Operand,asms[i].Operator);
             if(asms[i].Operator[0]=='='){
-                if(strcmp(asms[i].Label,"\t")){
+                if(!(strcmp(asms[i].Label,"\t")==0)){
                     fprintf(symfile,"%X %s\n",LOCATION_COUNTER,asms[i].Label);
                 }
                 if(asms[i].Operator[1]=='C'){
