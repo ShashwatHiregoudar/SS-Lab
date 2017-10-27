@@ -187,6 +187,8 @@ int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,
 }
 
 int main(){
+    system("cc Pass1.c");
+    system("./a.out");
     FILE *fpa = fopen("intermediateFile.txt","r");
     int no_of_lines = no_of_lines_in_file(fpa);
     FILE *fp1 = fopen("intermediateFile.txt","r");
