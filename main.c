@@ -58,7 +58,8 @@ int no_of_words(char *statement){
 
         }
         if(statement[i]=='\t'){
-            count--;
+            if(statement[i-1]!=39)
+                count--;
         }
         i++;
     }
@@ -187,15 +188,20 @@ int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,
 }
 
 int main(){
-    system("cc Pass1.c");
-    system("./a.out");
+    //system("cc Pass1.c");
+    //system("./a.out");
     FILE *fpa = fopen("intermediateFile.txt","r");
     int no_of_lines = no_of_lines_in_file(fpa);
     FILE *fp1 = fopen("intermediateFile.txt","r");
     ASMS asms[no_of_lines];
     char statement[30];
     int i=0;
+    int lno=-1;
     while(fgets(statement,50,fp1)){
+        lno++;
+        if(lno==9){
+            int p1 = 0;
+        }
         if(no_of_words(statement)==4){
             //printf("Statement %d    =    %s\n",i,statement);
             sscanf(statement,"%s %s %s %s", asms[i].LocCTR, asms[i].Label, asms[i].Operand, asms[i].Operator);
