@@ -181,7 +181,7 @@ int generate_opcodes(OPCODES *opcodes,int opcodes_size,ASMS *asms,int asms_size,
         }
         else{
             printf("Loc : %s\nLabel : %s\nOperand : %s\nOperator : %s\n",asms[i].LocCTR,asms[i].Label,asms[i].Operand,asms[i].Operator);
-            printf("error\n");
+            printf("opcode : error\n");
             strcpy(opcodes[j].o,"------");
         }
     }
