@@ -12,5 +12,8 @@ int length;
 }es[15];
 
 int main(){
+    FILE *fp1 = fopen("objectfile.o","r");
     
+    printf("Enter the location to load program\n");
+
 }
